@@ -81,3 +81,23 @@ func RelationsMapToRelation(rm RelationsMap) []Relations { // transform relation
 	}
 	return FinalRelation
 }
+
+func GetCoordinates(locationsNames []string) ([]Coordinates, error) {
+	var coordinants []Coordinates
+	var thisCoordinates Coordinates
+	for _, loc := range locationsNames {
+		//url := `https://nominatim.openstreetmap.org/search?q=` + loc + `&format=json`
+		url := `https://maps.googleapis.com/maps/api/geocode/json?` + loc
+		response, err := http.Get(url)
+		if err != nil {
+			return coordinants, err
+		}
+		defer response.Body.Close()
+		err = json.NewDecoder(response.Body).Decode(&thisCoordinates)
+		if err != nil {
+			return coordinants, err
+		}
+		coordinants = append(coordinants, thisCoordinates)
+	}
+	return coordinants, nil
+}

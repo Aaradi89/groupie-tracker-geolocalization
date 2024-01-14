@@ -1,6 +1,7 @@
 package backend
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"strconv"
@@ -18,7 +19,7 @@ func HomePage(w http.ResponseWriter, r *http.Request) { // execute home page htm
 			t, _ := template.ParseFiles("frontend/html/errorPage.html")
 			w.WriteHeader(500)
 			t.Execute(w, errPage)
-			return //400
+			return //500
 		}
 		t, _ := template.ParseFiles("frontend/html/homePage.html")
 		t.Execute(w, artists)
@@ -37,7 +38,7 @@ func ArtistsPage(w http.ResponseWriter, r *http.Request) { // get selected artis
 
 	var Band Band
 	var err error
-	errPage := ErrorPage{ErrStatus: `Error 500`, ErrMsg: `Bad Request`}
+	errPage := ErrorPage{ErrStatus: `Error 500`, ErrMsg: `Internal Server Error`}
 
 	if artistIndex-1 <= len(artists) && artistIndex > 0 {
 		Band.Artist = artists[artistIndex-1]
@@ -69,7 +70,20 @@ func ArtistsPage(w http.ResponseWriter, r *http.Request) { // get selected artis
 		return
 	}
 	Band.Relations = RelationsMapToRelation(Band.RelationsMap) // arrange relations to be used in artist template
+
+	//test coordinates
+	coo, err := GetCoordinates(Band.Locations.Locations)
+	// if err != nil {
+	// 	t, _ := template.ParseFiles("frontend/html/errorPage.html")
+	// 	w.WriteHeader(500)
+	// 	t.Execute(w, errPage)
+	// 	return
+	// }
+
+	fmt.Println(coo)
+
+	//test end
+
 	t, _ := template.ParseFiles("frontend/html/artist.html")
 	t.Execute(w, Band)
-
 }
