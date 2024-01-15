@@ -6,6 +6,7 @@ type Band struct { // collect all data in one struct
 	Dates        Dates
 	Relations    []Relations
 	RelationsMap RelationsMap
+	Coordinates  []Coordinates
 }
 
 type Artist struct {
@@ -47,6 +48,6 @@ type ErrorPage struct {
 }
 
 type Coordinates struct {
-	Lat string `json:"lat"`
-	Lon string `json:"lon"`
+	Lat float64 `json:"lat"`
+	Lon float64 `json:"lon"`
 }

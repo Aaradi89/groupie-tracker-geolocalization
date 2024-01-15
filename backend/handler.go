@@ -72,15 +72,15 @@ func ArtistsPage(w http.ResponseWriter, r *http.Request) { // get selected artis
 	Band.Relations = RelationsMapToRelation(Band.RelationsMap) // arrange relations to be used in artist template
 
 	//test coordinates
-	coo, err := GetCoordinates(Band.Locations.Locations)
-	// if err != nil {
-	// 	t, _ := template.ParseFiles("frontend/html/errorPage.html")
-	// 	w.WriteHeader(500)
-	// 	t.Execute(w, errPage)
-	// 	return
-	// }
+	Band.Coordinates, err = GetCoordinates(Band.Locations.Locations)
+	if err != nil {
+		t, _ := template.ParseFiles("frontend/html/errorPage.html")
+		w.WriteHeader(500)
+		t.Execute(w, errPage)
+		return
+	}
 
-	fmt.Println(coo)
+	fmt.Println(Band.Coordinates)
 
 	//test end
 
