@@ -3,6 +3,7 @@ package backend
 import (
 	"encoding/json"
 	"net/http"
+	"fmt"
 )
 
 func GetArtists() ([]Artist, error) {
@@ -85,19 +86,29 @@ func RelationsMapToRelation(rm RelationsMap) []Relations { // transform relation
 func GetCoordinates(locationsNames []string) ([]Coordinates, error) {
 	var coordinants []Coordinates
 	var thisCoordinates Coordinates
+	var res []map[string]interface{}
 	for _, loc := range locationsNames {
-		//url := `https://nominatim.openstreetmap.org/search?q=` + loc + `&format=json`
-		url := `https://maps.googleapis.com/maps/api/geocode/json?` + loc
+		url := `https://nominatim.openstreetmap.org/search?q=` + loc + `&format=json`
+		//url := `https://maps.googleapis.com/maps/api/geocode/json?` + loc
 		response, err := http.Get(url)
 		if err != nil {
 			return coordinants, err
 		}
 		defer response.Body.Close()
-		err = json.NewDecoder(response.Body).Decode(&thisCoordinates)
+		//var res []map[string]interface{}
+		//err = json.NewDecoder(response.Body).Decode(&thisCoordinates)
+		err = json.NewDecoder(response.Body).Decode(&res)
+fmt.Println(res)
 		if err != nil {
 			return coordinants, err
 		}
+		// e := res[0][`lat`]
+		// f := res[0][`lon`]
+		// thisCoordinates.Lat = e
+		// thisCoordinates.Lon = f
 		coordinants = append(coordinants, thisCoordinates)
 	}
+	//fmt.Println(`selected`)
+	//fmt.Println(res[0][`lat`])
 	return coordinants, nil
 }
