@@ -109,6 +109,7 @@
             </tbody>
         </table>
         <div id= "map"></div>
+        <div id= "co" data-coor="{{.Coordinates}}"></div>
 <script>
     const map=  L.map('map') 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -116,12 +117,7 @@
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-
-var markersData =  [ 
-    {lat: 51, lng: -100},
-    {lat: 52, lng:2},
-    {lat: 60, lng:30}
-];
+const markersData = {{ .Coordinates}}
 
 const markers = markersData.map(function({lat, lng}) {
     return L.marker([lat, lng]).addTo(map);

@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
 	"strconv"
@@ -23,6 +22,7 @@ func HomePage(w http.ResponseWriter, r *http.Request) { // execute home page htm
 		}
 		t, _ := template.ParseFiles("frontend/html/homePage.html")
 		t.Execute(w, artists)
+
 	default:
 		errPage := ErrorPage{ErrStatus: `Error 404`, ErrMsg: `Page Not Found`}
 		t, _ := template.ParseFiles("frontend/html/errorPage.html")
@@ -79,8 +79,6 @@ func ArtistsPage(w http.ResponseWriter, r *http.Request) { // get selected artis
 		t.Execute(w, errPage)
 		return
 	}
-
-	fmt.Println(Band.Coordinates)
 
 	//test end
 

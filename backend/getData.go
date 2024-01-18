@@ -90,16 +90,14 @@ func GetCoordinates(locationsNames []string) ([]Coordinates, error) {
 
 	for _, loc := range locationsNames {
 		url := `https://nominatim.openstreetmap.org/search?q=` + loc + `&format=json`
-		//url := `https://maps.googleapis.com/maps/api/geocode/json?` + loc
 		response, err := http.Get(url)
 		if err != nil {
 			return coordinants, err
 		}
 		defer response.Body.Close()
-		//var res []map[string]interface{}
-		//err = json.NewDecoder(response.Body).Decode(&thisCoordinates)
+
 		err = json.NewDecoder(response.Body).Decode(&res)
-		//fmt.Println(res)
+
 		if err != nil {
 			return coordinants, err
 		}
@@ -109,7 +107,7 @@ func GetCoordinates(locationsNames []string) ([]Coordinates, error) {
 			return coordinants, err
 		}
 
-		thisCoordinates.Lon, err = strconv.ParseFloat(res[0]["lon"].(string), 64)
+		thisCoordinates.Lng, err = strconv.ParseFloat(res[0]["lon"].(string), 64)
 		if err != nil {
 			return coordinants, err
 		}
