@@ -3,6 +3,7 @@ package backend
 import (
 	"encoding/json"
 	"net/http"
+	"regexp"
 	"strconv"
 )
 
@@ -28,15 +29,17 @@ func GetLocations(id string) (Locations, error) {
 	var locations Locations
 	response, err := http.Get(url + id)
 	if err != nil {
-		// fmt.Println("Error : ", err)
 		return locations, err
 	}
 	defer response.Body.Close()
 	err = json.NewDecoder(response.Body).Decode(&locations)
 	if err != nil {
-		// fmt.Println("Error : ", err)
 		return locations, err
 	}
+
+	// for i, location := range locations.Locations {
+	// 	locations.Locations[i] = regexp.MustCompile("-").ReplaceAllString(location, ", ")
+	// }
 	return locations, err
 }
 
@@ -87,9 +90,16 @@ func GetCoordinates(locationsNames []string) ([]Coordinates, error) {
 	var coordinants []Coordinates
 	var thisCoordinates Coordinates
 	var res []map[string]interface{}
+	var locationsNewNames []string
 
-	for _, loc := range locationsNames {
-		url := `https://nominatim.openstreetmap.org/search?q=` + loc + `&format=json`
+	for _, location := range locationsNames {
+		newName := regexp.MustCompile("-").ReplaceAllString(location, ",")
+		locationsNewNames = append(locationsNewNames, newName)
+	}
+
+	for _, loc := range locationsNewNames {
+		// url := `https://nominatim.openstreetmap.org/search?q=` + loc + `&format=json`
+		url := "https://nominatim.openstreetmap.org/search?format=json&q=" + loc
 		response, err := http.Get(url)
 		if err != nil {
 			return coordinants, err
