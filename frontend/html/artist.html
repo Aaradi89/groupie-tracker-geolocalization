@@ -112,10 +112,14 @@
         <div id= "co" data-coor="{{.Coordinates}}"></div>
 <script>
     const map=  L.map('map') 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
+
+const mainLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', {
+
+  maxZoom: 19,
+  attribution: '&copy; <a href="https://carto.com/">carto.com</a> contributors'
+});
+mainLayer.addTo(map);
+
 
 const markersData = {{ .Coordinates}}
 
